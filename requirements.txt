@@ -1,0 +1,22 @@
+numpy
+pandas
+nltk
+tensorflow==2.17.0
+setuptools
+dvc
+mlflow
+notebook
+matplotlib
+kaggle
+seaborn
+python-box
+pyYAML
+tqdm
+ensure
+joblib
+types-PyYAML
+scipy
+Flask
+Flask-Cors
+scikit-learn
+-e .
