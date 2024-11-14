@@ -40,8 +40,8 @@ class DataCleaning:
             df_0=df[df.generated==0]
             df_1=df[df.generated==1]
 
-            df_0=df_0.sample(5000)
-            df_1=df_1.sample(5000)
+            df_0=df_0.sample(15000)
+            df_1=df_1.sample(15000)
             df=pd.concat([df_1,df_0],axis=0)
             
             df.to_csv(self.config.fina_dir,index=False)
