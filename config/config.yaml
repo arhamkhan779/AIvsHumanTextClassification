@@ -10,3 +10,23 @@ data_clean:
   root_dir: artifacts/data_clean
   source_dir: artifacts/data_ingestion/AI_Human.csv
   final_dir: artifacts/data_clean/data_clean.csv
+
+preprocessing_dir:
+  root_dir: artifacts/data_preprocess
+  Unprocess_dir: artifacts/data_ingestion/UpdatedResumeDataSet.csv
+  text_preprocessor_file: artifacts/data_preprocess/text_preprocessor.pkl
+  target_preprocessor_file: artifacts/data_preprocess/target_preprocessor.pkl
+
+
+Model:
+  root_dir: artifacts/Model
+  model_file: artifacts/Model/model.h5
+
+Training:
+  root_dir: artifacts/training
+  model_file: artifacts/training/trained_model.h5
+  data_dir: artifacts\data_clean\data_clean.csv
+  target_preprocessor: artifacts/data_preprocess/target_preprocessor.pkl
+  text_preprocessor: artifacts/data_preprocess/text_preprocessor.pkl
+  results: artifacts/training/results.csv
+  base_model: artifacts/Model/model.h5

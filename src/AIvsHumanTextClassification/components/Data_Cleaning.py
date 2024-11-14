@@ -37,15 +37,17 @@ class DataCleaning:
             df=pd.concat([df_1,df_0_final],axis=0)
             logger.info("Balancing Dataset --> Completed")
 
-            df.to_csv(self.config.fina_dir)
+            df_0=df[df.generated==0]
+            df_1=df[df.generated==1]
+
+            df_0=df_0.sample(5000)
+            df_1=df_1.sample(5000)
+            df=pd.concat([df_1,df_0],axis=0)
+            
+            df.to_csv(self.config.fina_dir,index=False)
             logger.info(f"Save Clean file at {self.config.fina_dir}")
 
         except Exception as e:
             logger.error(f"Error occurred while downloading the dataset: {str(e)}")
             raise e
         
-if __name__ == "__main__":
-      config=ConfigurationManager()
-      conifgu=config.get_data_cleaning_config()
-      obj=DataCleaning(config=conifgu)
-      obj.Clean_file()

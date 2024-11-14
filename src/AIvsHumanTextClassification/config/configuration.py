@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from AIvsHumanTextClassification.constants import *
 from AIvsHumanTextClassification.utils.common import read_yaml,create_directories
-from AIvsHumanTextClassification.entity.config_entity import DataIngstionConfig,DataCleaningConfig
+from AIvsHumanTextClassification.entity.config_entity import DataIngstionConfig,DataCleaningConfig,DataPreprocessConfig,ModelConfig,TrainingConfig
 
 class ConfigurationManager:
     def __init__(self,
@@ -37,3 +37,55 @@ class ConfigurationManager:
             fina_dir=config.final_dir
         )
         return data_cleaning_config
+    
+    def get_data_preprocessing_config(self) ->DataPreprocessConfig:
+          config=self.config.preprocessing_dir
+          create_directories([config.root_dir])
+          
+          data_preprocessing_config=DataPreprocessConfig(
+               root_dir=config.root_dir,
+               source_dir=config.Unprocess_dir,
+               voc_size=self.params.VOC_SIZE,
+               target_preprocessor=config.target_preprocessor_file,
+               text_preprocessor=config.text_preprocessor_file,
+               max_length=self.params.max_length
+          )
+          return data_preprocessing_config
+    
+    def get_base_model_config(self) -> ModelConfig:
+         config=self.config.Model
+         create_directories([config.root_dir])
+
+         model_config=ModelConfig(
+              root_dir=config.root_dir,
+              model_path=config.model_file,
+              batch=self.params.BATCH,
+              epochs=self.params.EPOCHS,
+              Max_features=self.params.MAX_FEATURES,
+              optimizer=self.params.OPTIMIZER,
+              loss=self.params.loss,
+              metrics=self.params.metrics,
+              Voc_size=self.params.VOC_SIZE,
+              max_length=self.params.max_length)
+         
+         return model_config
+    
+    def get_training_config(self) -> TrainingConfig:
+         config=self.config.Training
+         create_directories([config.root_dir])
+         training_config=TrainingConfig(
+              root_dir=config.root_dir,
+              trained_model_path=config.model_file,
+              data_set_dir=config.data_dir,
+              target_preprocessor_path=config.target_preprocessor,
+              text_preprocessor_path=config.text_preprocessor,
+              results_path=config.results,
+              optimizer=self.params.OPTIMIZER,
+              loss=self.params.loss,
+              metrics=self.params.metrics,
+              batch=self.params.BATCH,
+              epochs=self.params.EPOCHS,
+              base_model=config.base_model
+         )
+        
+         return training_config
