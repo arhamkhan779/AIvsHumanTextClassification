@@ -1,22 +1,27 @@
+from flask import Flask, render_template, request, jsonify
 from tensorflow import keras
 import joblib
 import numpy as np
-import pandas as pd
+import re
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
+import nltk
+from tensorflow import keras
 
-preprocessor_path="artifacts/data_preprocess/text_preprocessor.pkl"
-model_path="artifacts/training/trained_model.h5"
+nltk.download('wordnet')
+nltk.download('punkt')
+ls=WordNetLemmatizer()
+stop_words = set(stopwords.words('english'))
 
+def preprocess(text):
+    preprocess_text=[]
+    text = re.sub('[^a-zA-Z]', ' ', text)  # Remove non-alphabetic characters
+    text = text.lower()  # Convert to lowercase
+    words = text.split()
+    words = [ls.lemmatize(word) for word in words if word not in stop_words]
+    preprocess_text.append(' '.join(words))
+    one_hot_rep = [keras.preprocessing.text.one_hot(words, 10000) for words in preprocess_text] 
+    padded_docs = keras.preprocessing.sequence.pad_sequences(one_hot_rep, padding='pre', maxlen=600)
+    return padded_docs
 
-text=str(input("Enter Text"))
-
-preprocessor=joblib.load(preprocessor_path)
-model=keras.models.load_model(model_path)
-
-
-text=preprocessor.fit_transform([text])
-names=['Human Text',"AI generated text"]
-
-
-prediction=model.predict(text)
-prediction=[1 if i>0.5 else 0 for i in prediction]
-print(names[prediction[0]])
+print(preprocess("My name is arham khan"))
